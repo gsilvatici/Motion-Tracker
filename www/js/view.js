@@ -16,59 +16,36 @@
         requestAnimFrame(animate);
 
         // create a background Sprite using an image
-        var background = PIXI.Sprite.fromImage("background.jpg");        
-        
+        var background = PIXI.Sprite.fromImage("background.jpg");
+
         background.width = width;
         background.height = height;
-        
-        stage.addChildAt(background, 0);   
-        
+
+        stage.addChildAt(background, 0);
+
         var bar = new PIXI.Graphics();
 
         bar.beginFill(0x404C68);
 
-        bar.drawRect(width*1/2, height*2/5, 5, 50);
+        bar.drawRect(width*1/2, 0, 5, height);
 
-
-//        var text = new PIXI.Text("STILL", {font: "35px Desyrel", align: "right", fill: "#bbbbbb"});
-//
-//        text.x = width*3/8;
-//        text.y = height*2/5;
-//        
-//        stage.addChild(text);
-        
         stage.addChild(bar);
 
-//        var lastFrame = (new Date()).getTime();
-//
-//        var transition = false;
-//
-//        var newText = text.text;
-//        
-//        var lastText = text.text;
-//        
-//        var pos = text.x;
-//
-        
         function animate() {
             requestAnimFrame(animate);
-//            
-//            var actualFrame = (new Date()).getTime();
-//            
-//            var deltaT = actualFrame - lastFrame;
 
             bar.clear();
-            
+
             bar.beginFill(0x404C68);
 
-            bar.drawRect(width*1/2 - magnitude*2, height*2/5, magnitude*4, 50);
-            
+            bar.drawRect(width*1/2 - magnitude*2, 0, magnitude*4, height);
+
             // render the stage
             renderer.render(stage);
-        }        
-        
+        }
 
-        
+
+
     }, false);
 
 }());

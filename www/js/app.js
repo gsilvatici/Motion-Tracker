@@ -7,6 +7,7 @@
 
     var webtaskURL = "https://wt-210a0744fa5cd1b641dc6a2bbd8fb340-0.run.webtask.io/motiont-listener";
 
+    screen.lockOrientation('portrait');
 
     var magnitude;
 

@@ -32,6 +32,19 @@
         stage.addChild(bar);
 
         function animate() {
+            if (orientationChanged) {
+              var aux = width;
+              width = height;
+              height = aux;
+
+              renderer.resize(width, height);
+
+              background.width = width;
+              background.height = height;
+
+              orientationChanged = false;
+            }
+
             requestAnimFrame(animate);
 
             bar.clear();

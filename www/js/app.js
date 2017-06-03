@@ -1,19 +1,29 @@
-    // Initialize Cordova plugins
-
-//            window.screen.orientation.lock('portrait');
+    // iOS doesnt work with the orientation plugin
+    if (device.platform == 'Android') {
+      screen.lockOrientation('portrait');
+    }
 
     // The watch id references the current `watchAcceleration`
     var watchID = null;
 
     var webtaskURL = "https://wt-210a0744fa5cd1b641dc6a2bbd8fb340-0.run.webtask.io/motiont-listener";
 
-    screen.lockOrientation('portrait');
-
     var magnitude;
 
     var latitude;
 
     var longiutde;
+
+    var currentOrientation = "";
+
+    // Check if HTML5 location support exists
+    var geolocation = false;
+    if(navigator.geolocation) {
+      geolocation = navigator.geolocation;
+    }
+
+
+    var orientationChanged = false;
     // Wait for Cordova to load
     //
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -21,8 +31,32 @@
     // Cordova is ready
     //
     function onDeviceReady() {
+        window.addEventListener("orientationchange", orientationChange, true);
+
+        function orientationChange(e) {
+            orientationChanged = true;
+        }
+
+        // AFTER the deviceready event:
+        if(geolocation) {
+          var locationService = geolocation; // native HTML5 geolocation
+        }
+        else {
+          var locationService = navigator.geolocation; // cordova geolocation plugin
+        }
+
         document.addEventListener("pause", onPause, false);
         startWatch();
+
+        document.addEventListener("backbutton", function(e){
+           if($.mobile.activePage.is('#homepage')){
+               e.preventDefault();
+               navigator.app.exitApp();
+           }
+           else {
+               navigator.app.backHistory()
+           }
+        }, false);
     }
 
     // Start watching the acceleration
@@ -40,9 +74,9 @@
         magnitude = accelMagnitude(acceleration);
 
         //Alert device if the acceleration surpass some limit (40m/s) and vibrates for 5 ms
-        if (magnitude >= 70) {
+        if (magnitude >= 15) {
             navigator.vibrate(500);
-            navigator.geolocation.getCurrentPosition(locationHandler, onError);
+            navigator.geolocation.getCurrentPosition(locationHandler, onError, {enableHighAccuracy: true});
             //make a web request with the environmental values
             var lat = latitude;
             var lon = longiutde;
@@ -110,5 +144,3 @@
         latitude = position.coords.latitude;
         longiutde = position.coords.longitude;
     };
-
-    navigator.geolocation.getCurrentPosition(locationHandler, onError);

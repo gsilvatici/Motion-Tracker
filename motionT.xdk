@@ -5,7 +5,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-cordova-ad-project/sample.zip",
       "projectGuid": "42facf71-bd75-49c2-8131-c746d48566e7",
-      "lastModifiedDate": 1496486621019,
+      "lastModifiedDate": 1496573854974,
       "creationDate": 1496271340902
     },
     "sourceDirectory": "www",
@@ -18,7 +18,7 @@
     "cordovaPlugins": [
       {
         "id": "cordova-plugin-device",
-        "version": "1.1.1",
+        "version": "1.1.5",
         "selectedState": "Included",
         "originType": "cordova.io",
         "name": "Device",
@@ -29,7 +29,7 @@
         "dependsOn": [],
         "dependedBy": [],
         "topLevel": true,
-        "checksum": "927290ca",
+        "checksum": "29b8c2a1",
         "gitref": "",
         "description": "Cordova Device Plugin"
       },
@@ -206,9 +206,9 @@
         "runtime_": "Cordova 3.x",
         "name_": "Android",
         "preferences_": {
-          "android-minSdkVersion": "20",
+          "android-minSdkVersion": "19",
           "android-targetSdkVersion": "21",
-          "android-installLocation": "auto",
+          "android-installLocation": "preferExternal",
           "Fullscreen": false,
           "Orientation": "portrait",
           "android-signed": true,

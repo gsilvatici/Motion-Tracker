@@ -1,14 +1,11 @@
-    // iOS doesnt work with the orientation plugin
-    if (device.platform == 'Android') {
-      screen.lockOrientation('portrait');
-    }
-
     // The watch id references the current `watchAcceleration`
     var watchID = null;
 
     var webtaskURL = "https://wt-210a0744fa5cd1b641dc6a2bbd8fb340-0.run.webtask.io/motiont-listener";
 
     var magnitude;
+
+    var trigger = 20;
 
     var latitude;
 
@@ -22,15 +19,19 @@
       geolocation = navigator.geolocation;
     }
 
-
     var orientationChanged = false;
     // Wait for Cordova to load
     //
     document.addEventListener("deviceready", onDeviceReady, false);
-
     // Cordova is ready
     //
     function onDeviceReady() {
+
+        // iOS doesnt work with the orientation plugin
+        if (device.platform == 'Android') {
+          screen.orientation.lock('portrait');
+        }
+
         window.addEventListener("orientationchange", orientationChange, true);
 
         function orientationChange(e) {
@@ -49,13 +50,7 @@
         startWatch();
 
         document.addEventListener("backbutton", function(e){
-           if($.mobile.activePage.is('#homepage')){
-               e.preventDefault();
-               navigator.app.exitApp();
-           }
-           else {
-               navigator.app.backHistory()
-           }
+            navigator.app.exitApp();
         }, false);
     }
 
@@ -64,47 +59,42 @@
     function startWatch() {
         // Update acceleration every 1 ms
         var options = { frequency: 1 };
-        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+        watchID = navigator.accelerometer.watchAcceleration(accelHandler, onError, options);
     }
 
 
-    // onSuccess: Get a snapshot of the current acceleration
+    // accelHandler: Get a snapshot of the current acceleration
     //
-    function onSuccess(acceleration) {
+    function accelHandler(acceleration) {
         magnitude = accelMagnitude(acceleration);
 
         //Alert device if the acceleration surpass some limit (40m/s) and vibrates for 5 ms
-        if (magnitude >= 15) {
+        if (magnitude >= trigger) {
             navigator.vibrate(500);
             navigator.geolocation.getCurrentPosition(locationHandler, onError, {enableHighAccuracy: true});
-            //make a web request with the environmental values
-            var lat = latitude;
-            var lon = longiutde;
-            var time = getTime();
-            $.get( webtaskURL + "?accel=" + magnitude + "&lat=" + lat + "&lon=" + lon + "&time=" + time);
         }
     }
 
     var getTime = function() {
-      var today = new Date();
-      var dd = today.getDate();
-      var mm = today.getMonth()+1; //January is 0!
-      var yyyy = today.getFullYear();
-      var hour = today.getHours();
-      var min = today.getMinutes();
-      var sec = today.getSeconds();
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        var hour = today.getHours();
+        var min = today.getMinutes();
+        var sec = today.getSeconds();
 
-      if(dd < 10) {
-          dd = '0' + dd;
-      }
+        if(dd < 10) {
+            dd = '0' + dd;
+        }
 
-      if(mm < 10) {
-          mm = '0' + mm;
-      }
+        if(mm < 10) {
+            mm = '0' + mm;
+        }
 
-      today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + min + ':' + sec;
+        today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + min + ':' + sec;
 
-      return today;
+        return today;
     }
 
     // Stop watching the acceleration
@@ -141,6 +131,7 @@
 
 
     var locationHandler = function(position) {
-        latitude = position.coords.latitude;
-        longiutde = position.coords.longitude;
+        //make a web request with the environmental values
+        var time = getTime();
+        $.get( webtaskURL + "?accel=" + magnitude + "&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&time=" + time);
     };

@@ -11,6 +11,10 @@
 
     var longiutde;
 
+    var auxm;
+
+    var lastChange;
+
     var currentOrientation = "";
 
     // Check if HTML5 location support exists
@@ -67,10 +71,10 @@
     //
     function accelHandler(acceleration) {
         magnitude = accelMagnitude(acceleration);
-
-        //Alert device if the acceleration surpass some limit (40m/s) and vibrates for 5 ms
+        //Alert device if the acceleration surpass some trigger limit and vibrates for 5 ms
         if (magnitude >= trigger) {
             navigator.vibrate(500);
+            auxm = magnitude;
             navigator.geolocation.getCurrentPosition(locationHandler, onError, {enableHighAccuracy: true});
         }
     }
@@ -126,12 +130,12 @@
     // onError: Failed to get the acceleration
     //
     function onError() {
-        alert('Error!');
+        console.log("Failed to read accelerometer");
     }
 
 
     var locationHandler = function(position) {
         //make a web request with the environmental values
         var time = getTime();
-        $.get( webtaskURL + "?accel=" + magnitude + "&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&time=" + time);
+        $.get( webtaskURL + "?accel=" + auxm + "&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&time=" + time);
     };

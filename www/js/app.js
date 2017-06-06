@@ -13,7 +13,8 @@
 
     var auxm;
 
-    var lastChange;
+    var d = new Date();
+    var lastChange = d.getTime();
 
     var currentOrientation = "";
 
@@ -72,7 +73,8 @@
     function accelHandler(acceleration) {
         magnitude = accelMagnitude(acceleration);
         //Alert device if the acceleration surpass some trigger limit and vibrates for 5 ms
-        if (magnitude >= trigger) {
+        if (magnitude >= trigger && (new Date().getTime() - lastChange) > 500) {
+            lastChange = new Date().getTime();
             navigator.vibrate(500);
             auxm = magnitude;
             navigator.geolocation.getCurrentPosition(locationHandler, onError, {enableHighAccuracy: true});

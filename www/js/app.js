@@ -5,7 +5,7 @@
 
     var magnitude;
 
-    var trigger = 20;
+    var trigger = 25;
 
     var latitude;
 
@@ -31,113 +31,114 @@
     // Cordova is ready
     //
     function onDeviceReady() {
+      navigator.splashscreen.hide();
 
-        // iOS doesnt work with the orientation plugin
-        if (device.platform == 'Android') {
-          screen.orientation.lock('portrait');
-        }
+      // iOS doesnt work with the orientation plugin
+      if (device.platform == 'Android') {
+        screen.orientation.lock('portrait');
+      }
 
-        window.addEventListener("orientationchange", orientationChange, true);
+      window.addEventListener("orientationchange", orientationChange, true);
 
-        function orientationChange(e) {
-            orientationChanged = true;
-        }
+      function orientationChange(e) {
+        orientationChanged = true;
+      }
 
-        // AFTER the deviceready event:
-        if(geolocation) {
-          var locationService = geolocation; // native HTML5 geolocation
-        }
-        else {
-          var locationService = navigator.geolocation; // cordova geolocation plugin
-        }
+      // AFTER the deviceready event:
+      if(geolocation) {
+        var locationService = geolocation; // native HTML5 geolocation
+      }
+      else {
+        var locationService = navigator.geolocation; // cordova geolocation plugin
+      }
 
-        document.addEventListener("pause", onPause, false);
-        startWatch();
+      document.addEventListener("pause", onPause, false);
+      startWatch();
 
-        document.addEventListener("backbutton", function(e){
-            navigator.app.exitApp();
-        }, false);
+      document.addEventListener("backbutton", function(e){
+        navigator.app.exitApp();
+      }, false);
     }
 
     // Start watching the acceleration
     //
     function startWatch() {
-        // Update acceleration every 1 ms
-        var options = { frequency: 1 };
-        watchID = navigator.accelerometer.watchAcceleration(accelHandler, onError, options);
+      // Update acceleration every 1 ms
+      var options = { frequency: 1 };
+      watchID = navigator.accelerometer.watchAcceleration(accelHandler, onError, options);
     }
 
 
     // accelHandler: Get a snapshot of the current acceleration
     //
     function accelHandler(acceleration) {
-        magnitude = accelMagnitude(acceleration);
-        //Alert device if the acceleration surpass some trigger limit and vibrates for 5 ms
-        if (magnitude >= trigger && (new Date().getTime() - lastChange) > 500) {
-            lastChange = new Date().getTime();
-            navigator.vibrate(500);
-            auxm = magnitude;
-            navigator.geolocation.getCurrentPosition(locationHandler, onError, {enableHighAccuracy: true});
-        }
+      magnitude = accelMagnitude(acceleration);
+      //Alert device if the acceleration surpass some trigger limit and vibrates for 5 ms
+      if (magnitude >= trigger && (new Date().getTime() - lastChange) > 500) {
+        lastChange = new Date().getTime();
+        navigator.vibrate(500);
+        auxm = magnitude;
+        navigator.geolocation.getCurrentPosition(locationHandler, onError, {enableHighAccuracy: true});
+      }
     }
 
     var getTime = function() {
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
-        var yyyy = today.getFullYear();
-        var hour = today.getHours();
-        var min = today.getMinutes();
-        var sec = today.getSeconds();
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      var hour = today.getHours();
+      var min = today.getMinutes();
+      var sec = today.getSeconds();
 
-        if(dd < 10) {
-            dd = '0' + dd;
-        }
+      if(dd < 10) {
+        dd = '0' + dd;
+      }
 
-        if(mm < 10) {
-            mm = '0' + mm;
-        }
+      if(mm < 10) {
+        mm = '0' + mm;
+      }
 
-        today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + min + ':' + sec;
+      today = mm + '/' + dd + '/' + yyyy + ' ' + hour + ':' + min + ':' + sec;
 
-        return today;
+      return today;
     }
 
     // Stop watching the acceleration
     //
     function stopWatch() {
-        if (watchID) {
-            navigator.accelerometer.clearWatch(watchID);
-            watchID = null;
-        }
+      if (watchID) {
+        navigator.accelerometer.clearWatch(watchID);
+        watchID = null;
+      }
     }
 
     //Background event handler
     //
     function onPause() {
-        startWatch();
+      startWatch();
     }
 
     //accelMagnitude: calculates de magnitude of the acceleration vector
     //
     function accelMagnitude(acceleration) {
-        var x = acceleration.x;
-        var y = acceleration.y;
-        var z = acceleration.z;
-        var magnitude = Math.sqrt(x*x + y*y + z*z);
-        magnitude = Math.round(magnitude * 100) / 100
-        return magnitude;
+      var x = acceleration.x;
+      var y = acceleration.y;
+      var z = acceleration.z;
+      var magnitude = Math.sqrt(x*x + y*y + z*z);
+      magnitude = Math.round(magnitude * 100) / 100
+      return magnitude;
     }
 
     // onError: Failed to get the acceleration
     //
     function onError() {
-        console.log("Failed to read accelerometer");
+      console.log("Failed to read accelerometer");
     }
 
 
     var locationHandler = function(position) {
-        //make a web request with the environmental values
-        var time = getTime();
-        $.get( webtaskURL + "?accel=" + auxm + "&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&time=" + time);
+      //make a web request with the environmental values
+      var time = getTime();
+      $.get( webtaskURL + "?accel=" + auxm + "&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&time=" + time);
     };

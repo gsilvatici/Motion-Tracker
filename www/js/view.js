@@ -13,20 +13,12 @@
 
         // create a background Sprite using an image
         var background = PIXI.Sprite.fromImage("background.jpg");
-        //
-        // background.width = width;
-        // background.height = height;
+
 
         var settings = PIXI.Sprite.fromImage("settings-icon.png");
 
         settings.interactive = true;
-        //
-        // settings.x = width*4/5 ;
-        // settings.y = height - height*17/18;
-        //
-        // settings.width = width*1/7
-        // settings.height = settings.width;
-        //
+
         var bar = new PIXI.Graphics();
 
         bar.beginFill(0x404C68);
@@ -46,15 +38,9 @@
 
 
         var text = new PIXI.Text("SENSIVITY", {fontFamily: "Verdana", fontSize:'2em', align: "right", fill: "#bbbbbb"});
-        //
-        // text.x = width*1/4;
-        // text.y = height*1/4;
-        //
+
         var value = new PIXI.Text(trigger, {fontFamily: "Verdana", fontSize:'2em', align: "right", fill: "#bbbbbb"});
-        //
-        // value.x = width*1/4;
-        // value.y = height*9/26;
-        //
+
         var left = PIXI.Sprite.fromImage("left.png");
         var right = PIXI.Sprite.fromImage("right.png");
         var back = PIXI.Sprite.fromImage("return.png");
@@ -76,25 +62,6 @@
 
         back.width = width*1/14;
         back.height = height*1/16;
-        //
-        // left.width = width*1/16;
-        // left.height = height*1/18;
-        //
-        // right.width = width*1/16;
-        // right.height = height*1/18;
-        //
-        // left.x = width*1/4;
-        // left.y = height*1/2;
-        //
-        // right.x = width*4/9;
-        // right.y = height*1/2;
-        //
-        // back.width = width*1/14;
-        // back.height = height*1/16;
-        //
-        // back.x = settings.x;
-        // back.y = height*1/2;
-        //
 
         baseContainer.addChild(background);
         baseContainer.addChild(settings);
@@ -146,23 +113,11 @@
         text.x = width*1/4;
         text.y = height*1/4;
 
-        // settings.width = width*1/7;
-        // settings.height = settings.width;
-
-        // left.width = width*1/16;
-        // left.height = height*1/18;
-        //
-        // right.width = width*1/16;
-        // right.height = height*1/18;
-
         left.x = width*1/4;
         left.y = height*1/2;
 
         right.x = width*4/9;
         right.y = height*1/2;
-
-        // back.width = width*1/14;
-        // back.height = height*1/16;
 
         back.x = settings.x;
         back.y = height*1/2;
@@ -202,7 +157,7 @@
       }
 
       left.touchstart = function(touchData) {
-        if (trigger >= 10) {
+        if (trigger >= 15) {
           trigger-= 1;
           value.setText(trigger);
         }

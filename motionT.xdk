@@ -5,7 +5,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-cordova-ad-project/sample.zip",
       "projectGuid": "42facf71-bd75-49c2-8131-c746d48566e7",
-      "lastModifiedDate": 1496573854974,
+      "lastModifiedDate": 1496788981235,
       "creationDate": 1496271340902
     },
     "sourceDirectory": "www",
@@ -136,26 +136,6 @@
         "dependedBy": []
       },
       {
-        "id": "cordova-plugin-whitelist",
-        "name": "Whitelist",
-        "version": "1.2.2",
-        "originType": "cordova.io",
-        "origin": "cordova-plugin-whitelist",
-        "gitref": "",
-        "paramvals": {},
-        "sourceLocation": "plugins/cordova-plugin-whitelist",
-        "selectedState": "Included",
-        "checksum": "c0d34e60",
-        "dependsOn": [],
-        "topLevel": true,
-        "cordovaVersion": ">=3.0.0",
-        "permissions": {},
-        "description": "Cordova Network Whitelist Plugin",
-        "data": {},
-        "dependedBy": [],
-        "custom": "true"
-      },
-      {
         "id": "es6-promise-plugin",
         "name": "Promise",
         "version": "4.1.0",
@@ -206,7 +186,7 @@
         "runtime_": "Cordova 3.x",
         "name_": "Android",
         "preferences_": {
-          "android-minSdkVersion": "19",
+          "android-minSdkVersion": "20",
           "android-targetSdkVersion": "21",
           "android-installLocation": "preferExternal",
           "Fullscreen": false,
